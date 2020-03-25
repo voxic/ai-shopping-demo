@@ -41,13 +41,9 @@
           <!-- Card content -->
           <div class="card-body">
             <!-- Title -->
-            <h4 class="card-title">Camera One</h4>
+            <h4 class="card-title">Camera</h4>
           <!-- Card image -->
-          <img class="large-image" id="camOne" src="/img/nofeed.png" alt="Card image cap">
-          <p>FPS: <span id="fpsOne"></span></p>
-          <table id="tableOne">
-            
-          </table>          
+          <img class="large-image" id="camOne" src="/img/nofeed.png" alt="Card image cap">       
             <!-- Text -->
           </div>
         </div>
@@ -57,17 +53,22 @@
         <!-- Card -->
         <div class="card">
           <!-- Card content -->
-          <div class="card-body">
+          <div class="card-body" style="min-height: 300px;">
             <!-- Title -->
-            <h4 class="card-title">Camera Two</h4>
+            <h4 class="card-title">Shopping cart</h4>
           <!-- Card image -->
-          <img class="large-image" id="camTwo" src="/img/nofeed.png" alt="Card image cap">
-          <p>FPS: <span id="fpsTwo"></span></p>
           <table id="tableTwo">
             
           </table>
+ 
             <!-- Text -->
           </div>
+          <div class="card-footer text-muted text-center mt-4">
+            <table id="totalTable">
+
+
+            </table>
+          </div>          
         </div>
         <!-- Card -->
       </div>
@@ -93,74 +94,53 @@
   <script src="/socket.io/socket.io.js"></script>
   <script>
 
-    var socket = io.connect(window.location.origin);
-    var fpsOne = 0;
-    var fpsTwo = 0;
-    var lastLeftData = '';
-    var lastRightData = '';
-    socket.on('left_frame', function (data) {
+    var socket = io.connect(window.location.origin); //Connect the socker.io session, fetch the URL from the URL bar.
+    var lastData = '';
+    socket.on('frame', function (data) {
         try {
-          $("#camOne").attr('src',"data:image/png;base64," + data);
-          fpsOne++; 
+          $("#camOne").attr('src',"data:image/png;base64," + data); //Update attribute for the IMG tag.
         }
         catch(err){
           console.log(err);
         }
-      });
-    setInterval(()=>{
-      $("#fpsOne").text(fpsOne);
-      fpsOne = 0;
-    },1000)
+      });    
 
-    socket.on('left_data', function(data){
+    //Wait for incoming data
+    socket.on('data', function (data) {
       try {
         if(data.length > 1){
           var payload = JSON.parse(data);
           var tempTxt = " ";
-          if(lastLeftData !== payload){
-            for (x in payload) {
-                tempTxt += "<tr><td>" + x + "</td><td>"+ payload[x] +"</td></tr>";
+          if(lastData !== payload){
+            var price = {
+              "banana" : 1.23,
+              "orange" : 2.32,
+              "apple" : 0.32
+                        }
+            var cart = {items : [], total: 0.00}
+            var numOfItems = 0;
+            for(x in payload.detections){
+              if(String(payload.detections[x]) in price){ //Check to see that we have a price for the detected object, if not, skip.
+                if(numOfItems < 2){ //Limited to just show two items
+                  cart.items.push({label : payload.detections[x], price : price[payload.detections[x]]})
+                  cart.total += price[payload.detections[x]];
+                  numOfItems++;
+                }
+              }
             }
-          $("#tableOne").html(tempTxt);
-          lastLeftData = payload;
+            for (item in cart.items) {
+                tempTxt += "<tr class='itemRow'><th class='itemLabel'>" + String(cart.items[item].label).replace(/^./, cart.items[item].label[0].toUpperCase()) + "</th><td class='itemPrice'>$"+ cart.items[item].price +"</td></tr>";
+            }
+            $("#totalTable").html("<tr><th class='totalText'>Total:</th><td class='totalPrice'>$" + Number(cart.total).toFixed(2) + "</td></tr>");
+          $("#tableTwo").html(tempTxt);
+          lastData = payload;
         }  
       }        
       } catch (error) {
-        console.log("Bad JSON in left json_payload")
+        console.log("Bad JSON in left json_payload" + error)
       }
     });
 
-    socket.on('right_frame', function (data) {
-        try {
-          $("#camTwo").attr('src',"data:image/png;base64," + data);
-          fpsTwo++; 
-        }
-        catch(err){
-          console.log(err);
-        }
-      });
-    setInterval(()=>{
-      $("#fpsTwo").text(fpsTwo);
-      fpsTwo = 0;
-    },1000)
-
-    socket.on('right_data', function(data){
-      try {
-        if(data.length > 1){
-          var payload = JSON.parse(data);
-          var tempTxt = " ";
-          if(lastRightData !== payload){
-            for (x in payload) {
-                tempTxt += "<tr><td>" + x + "</td><td>"+ payload[x] +"</td></tr>";
-            }
-          $("#tableTwo").html(tempTxt);
-          lastRightData = payload;
-        }
-      }        
-      } catch (error) {
-        console.log("Bad JSON in right json_payload")
-      }
-    });  
   </script>
 </body>
 </html>

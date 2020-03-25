@@ -6,11 +6,32 @@
  */
 
  .navbar-custom {
-    background-color: #ff000d;
+    background-color:lightskyblue;
     padding-top: 3em;
 }
 
 .large-image {
     min-width: 100%;
     max-width: 100%;
+}
+
+.itemRow {
+    border-bottom:1pt solid black;
+}
+
+.itemLabel {
+    font-size: 2em;
+    padding-right: 50px;
+}
+.itemPrice {
+    font-size: 1.2em;
+    color: red;
+}
+.totalText {
+    font-size: 3em;
+    color: black;
+}
+.totalPrice {
+    font-size: 3em;
+    color: red;
 }

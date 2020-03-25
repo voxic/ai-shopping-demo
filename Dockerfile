@@ -1,5 +1,5 @@
 #
-# * Project: generic-node-dashboard
+# * Project: ai-shopping-demo
 # * File: Dockerfile
 # * Author: Emil Nilsson
 # * Contact: emil.nilsson@nutanix.com

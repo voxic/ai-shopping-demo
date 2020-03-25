@@ -1,20 +1,21 @@
 
  [//]: # ( ** )  
- [//]: # ( * Project: generic-node-dashboard)  
+ [//]: # ( * Project: ai-shopping-demo)  
  [//]: # ( * File: README.md)  
  [//]: # ( * Author: Emil Nilsson)  
  [//]: # ( * Contact: emil.nilsson@nutanix.com)  
  [//]: # ( ** )  
 
-# Generic Node Dashboard
+# Ai shopping demo
 
-Simple Dashboard built using MDBootstrap, Express, Socket.io, NATS.io and Node to display two video feeds and relevant data.
+Simple demo built using MDBootstrap, Express, Socket.io, NATS.io and Node to display a video feed and relevant data in a shopping cart.
+
+![Screenshot](Screenshot.png)
 
 The node server is listening on port 4000
 
-The application expects 3 environmental variables to be set
-* LEFT_ENDPOINT Should be pointing at NATS topic for left feed
-* RIGHT_ENDPOINT Should be pointing at NATS topic for right feed
+The application expects 2 environmental variables to be set
+* NATS_ENDPOINT Should be pointing at NATS topic
 * NATS_PORT_4222_TCP Should be pointing at NATS host
 
 ## Run using docker
@@ -31,16 +32,16 @@ docker run -p 4000:4000 your/tag:latest
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: nats-dashboard-demo
+  name: ai-shopping-demo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nats-dashboard-demo
+      app: ai-shopping-demo
   template:
     metadata:
       labels:
-        app: nats-dashboard-demo
+        app: ai-shopping-demo
     spec:
       containers:
       - name: app1
@@ -51,9 +52,7 @@ spec:
           containerPort: 4000
           hostPort: 4000
         env:
-        - name: LEFT_ENDPOINT
-          value: "topic"
-        - name: RIGHT_ENDPOINT
+        - name: NATS_ENDPOINT
           value: "topic"
 
 ---
@@ -69,10 +68,11 @@ spec:
   ports:
     - port: 4000
   selector:
-    app: nats-dashboard-demo
+    app: ai-shopping-demo
 
 ````
-Project: generic-node-dashboard
-File: index.js
-Author: Emil Nilsson
-Contact: emil.nilsson@nutanix.com
+
+Project: generic-node-dashboard  
+File: index.js  
+Author: Emil Nilsson  
+Contact: emil.nilsson@nutanix.com  
