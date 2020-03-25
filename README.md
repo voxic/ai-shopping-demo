@@ -72,7 +72,7 @@ spec:
 
 ````
 
-Project: generic-node-dashboard  
-File: index.js  
+Project: ai-shopping-demo 
+File: README.md
 Author: Emil Nilsson  
 Contact: emil.nilsson@nutanix.com  
