@@ -72,7 +72,7 @@ spec:
 
 ````
 
-Project: ai-shopping-demo 
-File: README.md
+Project: ai-shopping-demo  
+File: README.md  
 Author: Emil Nilsson  
 Contact: emil.nilsson@nutanix.com  
