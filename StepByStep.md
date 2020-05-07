@@ -311,6 +311,7 @@ def main(ctx, msg):
 ```
 
 Click on ```Create``` down in the right corner.
+> If you are experiencing issues running the function, try copy/paste from the source file located here: ["Source"](https://github.com/voxic/ai-shopping-demo/blob/master/serverless/ai-detect-func.py)
 
 ## Step 4 - Create a Data pipeline
 
